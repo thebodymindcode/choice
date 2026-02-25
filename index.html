@@ -97,7 +97,8 @@
         .shift-item{text-align:center;padding:36px 24px;background:var(--bg-card);border:1.5px solid rgba(155,66,52,0.15);transition:all .4s ease}
         .shift-item:hover{border-color:var(--terra-border-h);transform:translateY(-4px);box-shadow:0 14px 36px rgba(155,66,52,0.06)}
         .shift-old{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:line-through;margin-bottom:10px}
-        .shift-arrow{font-size:1rem;color:var(--terra);margin-bottom:10px;display:block}
+        .shift-arrow{font-size:1rem;color:var(--terra);margin-bottom:10px;display:block;animation:shiftBounce 2s ease-in-out infinite}
+        @keyframes shiftBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
         .shift-new{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:500;color:var(--terra-dark);line-height:1.4}
 
         /* HOOKS */
@@ -283,17 +284,26 @@
             </div>
             <div class="reveal reveal-d1" style="display:flex;justify-content:center">
                 <svg width="320" height="260" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="120" r="80" stroke="#9B4234" stroke-width="2.5" stroke-dasharray="6 8" opacity="0.4"/>
-                    <circle cx="160" cy="120" r="50" stroke="#9B4234" stroke-width="1.5" opacity="0.2"/>
+                    <style>
+                        @keyframes loopSpin{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-88}}
+                        @keyframes loopPulse{0%,100%{r:7;opacity:.7}50%{r:10;opacity:.9}}
+                        @keyframes labelFade{0%,20%{opacity:1}25%,45%{opacity:.2}50%,70%{opacity:1}75%,95%{opacity:.2}}
+                        @keyframes l1{0%,20%{opacity:1;font-size:12px}25%,95%{opacity:.25;font-size:11px}}
+                        @keyframes l2{25%,45%{opacity:1;font-size:12px}50%,95%{opacity:.25;font-size:11px}0%,20%{opacity:.25;font-size:11px}}
+                        @keyframes l3{50%,70%{opacity:1;font-size:12px}75%,95%{opacity:.25;font-size:11px}0%,45%{opacity:.25;font-size:11px}}
+                        @keyframes l4{75%,95%{opacity:1;font-size:12px}0%,70%{opacity:.25;font-size:11px}}
+                    </style>
+                    <circle cx="160" cy="120" r="80" stroke="#9B4234" stroke-width="2.5" stroke-dasharray="6 8" opacity="0.4" style="animation:loopSpin 8s linear infinite"/>
+                    <circle cx="160" cy="120" r="50" stroke="#9B4234" stroke-width="1.5" opacity="0.15"/>
                     <path d="M240 120 Q240 55 185 45" stroke="#9B4234" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>
                     <path d="M80 120 Q80 185 135 195" stroke="#9B4234" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>
                     <path d="M185 45 L191 54 L181 51" stroke="#9B4234" stroke-width="2" fill="none" opacity="0.55"/>
                     <path d="M135 195 L129 186 L139 189" stroke="#9B4234" stroke-width="2" fill="none" opacity="0.55"/>
-                    <text x="160" y="28" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600">вдохновился</text>
-                    <text x="268" y="124" text-anchor="start" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600">решил</text>
-                    <text x="160" y="222" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600">не сделал</text>
-                    <text x="52" y="124" text-anchor="end" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600">забыл</text>
-                    <circle cx="160" cy="120" r="7" fill="#9B4234" opacity="0.7"/>
+                    <text x="160" y="28" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l1 6s ease infinite">вдохновился</text>
+                    <text x="268" y="124" text-anchor="start" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l2 6s ease infinite">решил</text>
+                    <text x="160" y="222" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l3 6s ease infinite">не сделал</text>
+                    <text x="52" y="124" text-anchor="end" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l4 6s ease infinite">забыл</text>
+                    <circle cx="160" cy="120" fill="#9B4234" style="animation:loopPulse 3s ease-in-out infinite"><animate attributeName="r" values="7;10;7" dur="3s" repeatCount="indefinite"/></circle>
                     <text x="160" y="142" text-anchor="middle" font-family="Playfair Display" font-size="12" fill="#9B4234" font-style="italic" opacity="0.8">петля</text>
                     <text x="160" y="252" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#5C4D46" font-weight="500">Совет всё тот же: «просто выбери»</text>
                 </svg>
@@ -337,22 +347,31 @@
             </div>
             <div class="hook-visual">
                 <svg width="300" height="220" viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="10" y="140" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" stroke-width="1.5"/>
+                    <style>
+                        @keyframes stepGlow1{0%,100%{opacity:1;stroke-width:2.5}30%,70%{opacity:.4;stroke-width:1.5}}
+                        @keyframes stepGlow2{0%,30%{opacity:.4;stroke-width:1.5}35%,65%{opacity:1;stroke-width:2.5}70%,100%{opacity:.4;stroke-width:1.5}}
+                        @keyframes stepGlow3{0%,65%{opacity:.7;stroke-width:2}70%,100%{opacity:1;stroke-width:3}}
+                        @keyframes markerClimb{0%,30%{cx:50;cy:137}35%,65%{cx:150;cy:97}70%,100%{cx:250;cy:52}}
+                        @keyframes markerPulse{0%,100%{r:4;opacity:.6}50%{r:6;opacity:.9}}
+                        @keyframes choiceGlow{0%,65%{box-shadow:none;filter:none}70%,100%{filter:drop-shadow(0 0 8px rgba(155,66,52,0.3))}}
+                    </style>
+                    <rect x="10" y="140" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" style="animation:stepGlow1 5s ease infinite"/>
                     <text x="50" y="162" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#5C4D46" font-weight="600">ХОЧУ</text>
                     <text x="50" y="178" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#5C4D46" font-weight="600">ХОТЕТЬ</text>
                     <text x="50" y="210" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">фантазия</text>
-                    <rect x="110" y="100" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" stroke-width="1.5"/>
+                    <rect x="110" y="100" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" style="animation:stepGlow2 5s ease infinite"/>
                     <text x="150" y="133" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#332924" font-weight="600">ХОЧУ</text>
                     <text x="150" y="170" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">пожелание</text>
-                    <rect x="210" y="50" width="80" height="56" rx="3" fill="#9B4234" stroke="#7A2E23" stroke-width="2"/>
-                    <text x="250" y="77" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#fff" font-weight="700">ВЫБИРАЮ</text>
+                    <g style="animation:choiceGlow 5s ease infinite">
+                        <rect x="210" y="50" width="80" height="56" rx="3" fill="#9B4234" stroke="#7A2E23" stroke-width="2"/>
+                        <text x="250" y="77" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#fff" font-weight="700">ВЫБИРАЮ</text>
+                    </g>
                     <text x="250" y="120" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">действие</text>
                     <path d="M90 155 L110 135" stroke="#9B4234" stroke-width="2" opacity="0.5"/>
                     <path d="M190 115 L210 95" stroke="#9B4234" stroke-width="2" opacity="0.5"/>
-                    <circle cx="50" cy="137" r="4" fill="#9B4234" opacity="0.7"/>
-                    <text x="50" y="130" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="600">●  большинство</text>
-                    <path d="M195 108 Q202 80 210 78" stroke="#9B4234" stroke-width="1.2" stroke-dasharray="3 3" fill="none" opacity="0.45"/>
+                    <circle fill="#9B4234" style="animation:markerPulse 2s ease infinite"><animate attributeName="cx" values="50;50;150;150;250;250;50" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="137;137;97;97;52;52;137" dur="5s" repeatCount="indefinite"/><animate attributeName="r" values="5;5;5;5;6;8;5" dur="5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.6;.6;.6;.9;.9;.6" dur="5s" repeatCount="indefinite"/></circle>
                     <text x="192" y="112" text-anchor="end" font-family="Playfair Display" font-size="10" fill="#9B4234" font-style="italic" opacity="0.7">пропасть</text>
+                    <path d="M195 108 Q202 80 210 78" stroke="#9B4234" stroke-width="1.2" stroke-dasharray="3 3" fill="none" opacity="0.45"/>
                 </svg>
             </div>
         </div>
@@ -372,15 +391,28 @@
             </div>
             <div class="hook-visual">
                 <svg width="260" height="220" viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="20" y="20" width="220" height="180" rx="4" stroke="#9B4234" stroke-width="2" stroke-dasharray="6 8" opacity="0.4" fill="none"/>
-                    <rect x="45" y="45" width="170" height="130" rx="3" stroke="#9B4234" stroke-width="2" stroke-dasharray="5 7" opacity="0.5" fill="none"/>
-                    <rect x="70" y="70" width="120" height="80" rx="2" stroke="#9B4234" stroke-width="2.5" opacity="0.55" fill="rgba(155,66,52,0.03)"/>
-                    <circle cx="130" cy="110" r="7" fill="#9B4234" opacity="0.75"/>
-                    <text x="130" y="16" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#5C4D46" font-weight="500">«не&nbsp;для&nbsp;меня»</text>
-                    <text x="130" y="41" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">«не&nbsp;получится»</text>
-                    <text x="130" y="66" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600">«не&nbsp;могу»</text>
-                    <text x="130" y="165" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600">«уже поздно»</text>
-                    <text x="130" y="190" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">«не&nbsp;сейчас»</text>
+                    <style>
+                        @keyframes wallClose1{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.55;transform:scale(.97)}}
+                        @keyframes wallClose2{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.65;transform:scale(.95)}}
+                        @keyframes wallClose3{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.7;transform:scale(.93)}}
+                        @keyframes trapped{0%,100%{r:7;opacity:.75}50%{r:5;opacity:.5}}
+                        @keyframes wallLabel{0%,100%{opacity:.7}50%{opacity:.9}}
+                    </style>
+                    <g transform-origin="130 110" style="animation:wallClose1 6s ease-in-out infinite">
+                        <rect x="20" y="20" width="220" height="180" rx="4" stroke="#9B4234" stroke-width="2" stroke-dasharray="6 8" opacity="0.4" fill="none"/>
+                    </g>
+                    <g transform-origin="130 110" style="animation:wallClose2 6s ease-in-out infinite .5s">
+                        <rect x="45" y="45" width="170" height="130" rx="3" stroke="#9B4234" stroke-width="2" stroke-dasharray="5 7" opacity="0.5" fill="none"/>
+                    </g>
+                    <g transform-origin="130 110" style="animation:wallClose3 6s ease-in-out infinite 1s">
+                        <rect x="70" y="70" width="120" height="80" rx="2" stroke="#9B4234" stroke-width="2.5" opacity="0.55" fill="rgba(155,66,52,0.03)"/>
+                    </g>
+                    <circle cx="130" cy="110" fill="#9B4234"><animate attributeName="r" values="7;5;7" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;.5;.75" dur="6s" repeatCount="indefinite"/></circle>
+                    <text x="130" y="16" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#5C4D46" font-weight="500" style="animation:wallLabel 6s ease infinite">«не для меня»</text>
+                    <text x="130" y="41" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500" style="animation:wallLabel 6s ease infinite .5s">«не получится»</text>
+                    <text x="130" y="66" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600" style="animation:wallLabel 6s ease infinite 1s">«не могу»</text>
+                    <text x="130" y="165" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600" style="animation:wallLabel 6s ease infinite 1s">«уже поздно»</text>
+                    <text x="130" y="190" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500" style="animation:wallLabel 6s ease infinite .5s">«не сейчас»</text>
                     <text x="130" y="215" text-anchor="middle" font-family="Playfair Display" font-size="11" fill="#9B4234" font-style="italic" opacity="0.7">стены решений</text>
                 </svg>
             </div>
@@ -402,22 +434,37 @@
             </div>
             <div class="hook-visual">
                 <svg width="260" height="240" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes drainLevel{0%{y:80;height:128}50%{y:150;height:58}100%{y:80;height:128}}
+                        @keyframes drainLine{0%{y1:80;y2:80}50%{y1:150;y2:150}100%{y1:80;y2:80}}
+                        @keyframes drip1{0%{opacity:0;transform:translateY(0)}20%{opacity:.5}100%{opacity:0;transform:translateY(28px)}}
+                        @keyframes drip2{0%{opacity:0;transform:translateY(0)}20%{opacity:.5}100%{opacity:0;transform:translateY(32px)}}
+                        @keyframes drip3{0%{opacity:0;transform:translateY(0)}20%{opacity:.4}100%{opacity:0;transform:translateY(24px)}}
+                        @keyframes labelDim{0%{opacity:.7}50%{opacity:.3}100%{opacity:.7}}
+                        @keyframes nowPulse{0%,100%{opacity:.8}50%{opacity:.5}}
+                    </style>
                     <path d="M80 20 L80 185 Q80 210 130 210 Q180 210 180 185 L180 20" stroke="#9B4234" stroke-width="2.5" fill="none" opacity="0.5"/>
-                    <rect x="81" y="150" width="98" height="58" rx="1" fill="#9B4234" opacity="0.1"/>
-                    <path d="M81 150 L179 150" stroke="#9B4234" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.5"/>
-                    <path d="M100 210 L100 222" stroke="#9B4234" stroke-width="1.5" opacity="0.35"/>
-                    <path d="M130 210 L130 226" stroke="#9B4234" stroke-width="1.5" opacity="0.35"/>
-                    <path d="M160 210 L160 220" stroke="#9B4234" stroke-width="1.5" opacity="0.35"/>
-                    <text x="198" y="55" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">желания</text>
-                    <text x="198" y="85" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">время</text>
-                    <text x="198" y="115" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">границы</text>
-                    <text x="198" y="145" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500">мечты</text>
+                    <rect x="81" width="98" rx="1" fill="#9B4234" opacity="0.1"><animate attributeName="y" values="80;150;80" dur="8s" repeatCount="indefinite"/><animate attributeName="height" values="128;58;128" dur="8s" repeatCount="indefinite"/></rect>
+                    <line x1="81" x2="179" stroke="#9B4234" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.5"><animate attributeName="y1" values="80;150;80" dur="8s" repeatCount="indefinite"/><animate attributeName="y2" values="80;150;80" dur="8s" repeatCount="indefinite"/></line>
+                    <!-- Drips -->
+                    <g style="animation:drip1 2.5s ease-in infinite 0s"><path d="M100 210 L100 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="100" cy="218" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <g style="animation:drip2 2.5s ease-in infinite .8s"><path d="M130 210 L130 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="130" cy="220" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <g style="animation:drip3 2.5s ease-in infinite 1.6s"><path d="M160 210 L160 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="160" cy="217" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <!-- Labels that dim as level passes them -->
+                    <text x="198" y="55" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500"><animate attributeName="opacity" values=".7;.3;.7" dur="8s" repeatCount="indefinite"/></text>
+                    <text x="198" y="55" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500">желания</text>
+                    <text x="198" y="85" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite .5s">время</text>
+                    <text x="198" y="115" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite 1s">границы</text>
+                    <text x="198" y="145" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite 1.5s">мечты</text>
                     <path d="M180 50 L193 50" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
                     <path d="M180 80 L193 80" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
                     <path d="M180 110 L193 110" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
                     <path d="M180 140 L193 140" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
-                    <text x="62" y="155" text-anchor="end" font-family="Playfair Display" font-size="11" fill="#9B4234" font-style="italic" opacity="0.8">сейчас</text>
-                    <path d="M66 152 L80 152" stroke="#9B4234" stroke-width="1.2" opacity="0.6"/>
+                    <!-- "сейчас" label moves with level -->
+                    <g style="animation:nowPulse 3s ease infinite">
+                        <text x="62" font-family="Playfair Display" font-size="11" fill="#9B4234" font-style="italic" text-anchor="end"><animate attributeName="y" values="84;154;84" dur="8s" repeatCount="indefinite"/>сейчас</text>
+                        <line x1="66" x2="80" stroke="#9B4234" stroke-width="1.2" opacity="0.6"><animate attributeName="y1" values="82;152;82" dur="8s" repeatCount="indefinite"/><animate attributeName="y2" values="82;152;82" dur="8s" repeatCount="indefinite"/></line>
+                    </g>
                 </svg>
             </div>
         </div>
