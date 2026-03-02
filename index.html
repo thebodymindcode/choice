@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор | Архитектура сознания</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF7F4;
+            --bg-warm: #F5EFE8;
+            --bg-card: #FFFFFF;
+            --bg-accent: #FDF5F2;
+            --bg-deep: #2C1810;
+            --terra: #9B4234;
+            --terra-dark: #7A2E23;
+            --terra-deep: #5C1F16;
+            --terra-light: #C4675A;
+            --terra-pale: rgba(155,66,52,0.06);
+            --terra-border: rgba(155,66,52,0.15);
+            --terra-border-h: rgba(155,66,52,0.35);
+            --text: #1E1714;
+            --text-body: #332924;
+            --text-muted: #5C4D46;
+            --text-dim: #8A7A73;
+            --border: rgba(155,66,52,0.10);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text-body);line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:500;line-height:1.2;color:var(--text)}
+        body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.018;pointer-events:none;z-index:10000}
+        .container{max-width:820px;margin:0 auto;padding:0 28px}
+        .container-wide{max-width:1100px;margin:0 auto;padding:0 28px}
+        .accent{color:var(--terra)}
+
+        /* NAV */
+        nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 0;background:transparent;transition:all .4s ease}
+        nav.scrolled{background:rgba(250,247,244,0.96);backdrop-filter:blur(16px);box-shadow:0 2px 30px rgba(155,66,52,0.05);padding:14px 0}
+        nav .container-wide{display:flex;justify-content:space-between;align-items:center}
+        .logo{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text);text-decoration:none}
+        .nav-cta{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);text-decoration:none;padding:11px 26px;border:1px solid var(--terra);transition:all .3s;font-weight:600}
+        .nav-cta:hover{background:var(--terra);color:#fff}
+
+        /* HERO — clean */
+        .hero{
+            min-height:100vh;display:flex;flex-direction:column;
+            justify-content:center;align-items:center;text-align:center;
+            padding:130px 28px 100px;position:relative;
+            background:linear-gradient(180deg,var(--bg) 0%,var(--bg-warm) 100%);
+        }
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 45% 35% at 50% 15%,rgba(155,66,52,0.07) 0%,transparent 60%);pointer-events:none}
+        .hero-breath{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;border:2px solid rgba(155,66,52,0.14);animation:breathe 7s ease-in-out infinite;pointer-events:none;box-shadow:0 0 60px rgba(155,66,52,0.04)}
+        .hero-breath::before{content:'';position:absolute;top:-30px;left:-30px;right:-30px;bottom:-30px;border-radius:50%;border:1px solid rgba(155,66,52,0.07);animation:breathe2 7s ease-in-out infinite}
+        .hero-breath::after{content:'';position:absolute;top:30px;left:30px;right:30px;bottom:30px;border-radius:50%;border:1.5px dashed rgba(155,66,52,0.08);animation:breathe3 9s ease-in-out infinite}
+        @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(.88);opacity:.25}50%{transform:translate(-50%,-50%) scale(1.1);opacity:.55}}
+        @keyframes breathe2{0%,100%{transform:scale(1.05);opacity:.15}50%{transform:scale(.92);opacity:.35}}
+        @keyframes breathe3{0%,100%{transform:scale(.95) rotate(0deg);opacity:.2}50%{transform:scale(1.08) rotate(8deg);opacity:.4}}
+
+        .hero-label{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--terra);padding:10px 24px;border:1px solid var(--terra-border);margin-bottom:48px;opacity:0;animation:fadeUp .8s ease .2s forwards;font-weight:600}
+        .hero-title{font-size:clamp(3.2rem,9vw,6.5rem);font-weight:600;color:var(--text);margin-bottom:0;opacity:0;animation:fadeUp .8s ease .4s forwards;letter-spacing:-.03em;line-height:1}
+        .hero-sub{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.8vw,1.75rem);color:var(--terra-dark);font-style:italic;font-weight:400;max-width:600px;margin:24px auto 0;opacity:0;animation:fadeUp .8s ease .6s forwards;line-height:1.45;text-wrap:balance}
+        .hero-sub3{font-size:clamp(.92rem,1.8vw,1.08rem);color:var(--text-body);max-width:520px;margin:22px auto 0;opacity:0;animation:fadeUp .8s ease .7s forwards;line-height:1.8;text-align:center;text-wrap:balance}
+        .hero-meta{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;margin-top:40px;opacity:0;animation:fadeUp .8s ease .8s forwards}
+        .hero-meta-item{display:flex;align-items:center;gap:7px;font-size:.76rem;color:var(--text-muted)}
+        .hero-meta-dot{width:4px;height:4px;border-radius:50%;background:var(--terra)}
+        .hero-cta-wrap{margin-top:44px;opacity:0;animation:fadeUp .8s ease 1s forwards}
+
+        .btn-primary{display:inline-block;padding:18px 48px;background:var(--terra);color:#fff;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);text-decoration:none;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden}
+        .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transition:left .6s}
+        .btn-primary:hover::before{left:100%}
+        .btn-primary:hover{background:var(--terra-dark);transform:translateY(-2px);box-shadow:0 16px 44px rgba(155,66,52,0.22)}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+        .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(155,66,52,0.25),transparent)}
+
+        .section{padding:100px 0;position:relative}
+        .section-label{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--terra);margin-bottom:16px;font-weight:600}
+        .section-title{font-size:clamp(2.2rem,5.5vw,3.4rem);font-weight:400;color:var(--text);margin-bottom:20px;letter-spacing:-.02em;text-wrap:balance}
+        .section-sub{font-size:1rem;color:var(--text-body);max-width:520px;font-weight:400;line-height:1.85;text-wrap:balance}
+        .section-sub.center{margin:0 auto;text-align:center}
+
+        /* INTRO — visual grid */
+        .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:56px;align-items:center}
+        .intro-text{font-size:.95rem;color:var(--text-body);line-height:1.85;text-wrap:pretty}
+        .intro-text p{margin-bottom:16px}
+        .intro-text strong{color:var(--text);font-weight:600}
+        .intro-text em{color:var(--terra);font-style:italic}
+
+        /* SHIFT */
+        .shift-section{background:var(--bg-accent)}
+        .shift-quote{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3.2vw,2.2rem);font-weight:300;font-style:italic;color:var(--terra-dark);text-align:center;max-width:720px;margin:0 auto 52px;line-height:1.55}
+        .shift-items{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto}
+        .shift-item{text-align:center;padding:36px 24px;background:var(--bg-card);border:1.5px solid rgba(155,66,52,0.15);transition:all .4s ease}
+        .shift-item:hover{border-color:var(--terra-border-h);transform:translateY(-4px);box-shadow:0 14px 36px rgba(155,66,52,0.06)}
+        .shift-old{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:line-through;margin-bottom:10px}
+        .shift-arrow{font-size:1rem;color:var(--terra);margin-bottom:10px;display:block;animation:shiftBounce 2s ease-in-out infinite}
+        @keyframes shiftBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+        .shift-new{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:500;color:var(--terra-dark);line-height:1.4}
+
+        /* HOOKS */
+        .hook{padding:88px 0;border-bottom:1.5px solid rgba(155,66,52,0.15)}
+        .hook:last-child{border-bottom:none}
+        .hook-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+        .hook-inner.reverse{direction:rtl}
+        .hook-inner.reverse > *{direction:ltr}
+        .hook-content{}
+        .hook-num{font-family:'Playfair Display',serif;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--terra);opacity:.7;margin-bottom:18px;font-weight:500}
+        .hook-title{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:500;color:var(--text);margin-bottom:18px;line-height:1.3;text-wrap:balance}
+        .hook-body{font-size:.92rem;color:var(--text-body);line-height:1.85;text-wrap:pretty}
+        .hook-body p{margin-bottom:14px}
+        .hook-body strong{color:var(--text);font-weight:600}
+        .hook-body em{color:var(--terra);font-style:italic}
+        .hook-visual{display:flex;align-items:center;justify-content:center}
+        .hook-principle{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;font-style:italic;color:var(--terra-dark);margin:24px 0 0;padding:20px 0 0;border-top:1.5px solid rgba(155,66,52,0.25);line-height:1.55;text-wrap:balance}
+
+        /* ACCENT BLOCK */
+        .accent-block{padding:80px 0;background:var(--bg-deep);color:rgba(255,255,255,0.85);text-align:center}
+        .accent-block h2{color:#fff;font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:20px;font-weight:500}
+        .accent-block p{max-width:480px;margin:0 auto;font-size:.95rem;line-height:1.85;color:rgba(255,255,255,0.65)}
+        .accent-block .terra-glow{color:var(--terra-light)}
+
+        /* TOPICS */
+        .topics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:52px}
+        .topic-card{padding:26px 22px;background:var(--bg-card);border:1.5px solid rgba(155,66,52,0.12);transition:all .3s ease;display:flex;gap:14px;align-items:flex-start}
+        .topic-card:hover{border-color:var(--terra-border-h);background:var(--bg-accent)}
+        .topic-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--terra);opacity:.5;flex-shrink:0;width:26px;line-height:1}
+        .topic-txt{font-size:.86rem;color:var(--text-body);line-height:1.7;text-wrap:pretty}
+        .topic-txt strong{color:var(--text);font-weight:600}
+        .topic-card.full{grid-column:1/-1;background:var(--bg-accent);border-color:var(--terra-border);padding:30px;text-align:center;justify-content:center}
+        .topic-card.full .topic-txt{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--terra-dark);font-weight:400;font-style:italic}
+
+        /* PROCESS */
+        .process-steps{margin-top:56px;max-width:720px;margin-left:auto;margin-right:auto}
+        .process-step{display:grid;grid-template-columns:56px 1fr;gap:24px;padding:32px 0;border-bottom:1px solid var(--border);align-items:start}
+        .process-step:last-child{border-bottom:none}
+        .step-num{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:600;color:var(--terra);opacity:.4;line-height:1}
+        .step-title{font-size:1.3rem;font-weight:500;color:var(--text);margin-bottom:6px}
+        .step-desc{color:var(--text-body);font-size:.88rem;line-height:1.8;text-wrap:pretty}
+
+        /* AUDIENCE */
+        .audience-section{background:var(--bg-card)}
+        .audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
+        .audience-card{padding:32px;background:var(--bg)}
+        .audience-card.yes{border-top:4px solid var(--terra)}
+        .audience-card.no{border-top:4px solid var(--text-dim)}
+        .audience-card h3{font-size:1.1rem;margin-bottom:18px;color:var(--text)}
+        .audience-card ul{list-style:none}
+        .audience-card li{padding:8px 0;padding-left:22px;position:relative;font-size:.88rem;color:var(--text-body);line-height:1.55}
+        .audience-card.yes li::before{content:'✓';position:absolute;left:0;color:var(--terra);font-weight:700}
+        .audience-card.no li::before{content:'×';position:absolute;left:0;color:var(--text-dim);font-weight:600}
+
+        /* HOST */
+        .host-layout{display:grid;grid-template-columns:250px 1fr;gap:52px;margin-top:48px;align-items:start}
+        .host-photo{width:250px;height:330px;border:1px solid var(--border);overflow:hidden;background:var(--bg-warm)}
+        .host-photo img{width:100%;height:100%;object-fit:cover;display:block}
+        .host-info h3{font-size:1.8rem;color:var(--text);margin-bottom:6px}
+        .host-role{font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:22px;font-weight:600}
+        .host-info p{color:var(--text-body);margin-bottom:12px;font-size:.9rem;line-height:1.8}
+        .host-stats{display:flex;gap:40px;margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
+        .host-stat-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--terra);line-height:1}
+        .host-stat-lbl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;font-weight:500}
+
+        /* PRICING */
+        .pricing-section{text-align:center}
+        .pricing-card{max-width:480px;margin:44px auto 0;padding:48px 40px;background:var(--bg-card);border:1.5px solid rgba(155,66,52,0.3);position:relative;box-shadow:0 12px 48px rgba(155,66,52,0.1)}
+        .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--terra),transparent)}
+        .pricing-badge{display:inline-block;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);padding:7px 18px;border:1px solid var(--terra-border);margin-bottom:18px;font-weight:600}
+        .pricing-event{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:500;color:var(--text);margin-bottom:6px}
+        .pricing-format{font-size:.78rem;color:var(--text-muted);margin-bottom:18px}
+        .pricing-date{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;color:var(--terra-dark)}
+        .pricing-time{font-size:.78rem;color:var(--text-muted);margin-bottom:24px}
+        .pricing-line{width:56px;height:1px;background:var(--terra-border);margin:0 auto 24px}
+        .pricing-amount{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:600;color:var(--text);margin-bottom:4px}
+        .pricing-amount span{font-size:1.5rem;font-weight:400;color:var(--text-muted)}
+        .pricing-note{font-size:.74rem;color:var(--text-muted);margin-bottom:32px}
+        .pricing-bonuses{margin-top:28px;padding-top:24px;border-top:1px solid var(--border);text-align:left}
+        .pricing-bonuses-title{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);margin-bottom:14px;font-weight:600}
+        .pricing-bonus{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:var(--text-body);margin-bottom:9px;line-height:1.6}
+        .pricing-bonus-icon{color:var(--terra);font-size:.68rem}
+
+        /* FAQ */
+        .faq-wrap{max-width:700px;margin:0 auto}
+        .faq-list{margin-top:44px}
+        details.faq{border:1.5px solid rgba(155,66,52,0.12);margin-bottom:8px;background:var(--bg-card);transition:border-color .3s}
+        details.faq summary{padding:20px 26px;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--text);list-style:none;display:flex;justify-content:space-between;align-items:center}
+        details.faq summary::-webkit-details-marker{display:none}
+        details.faq summary::after{content:'+';font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--terra);transition:transform .3s}
+        details.faq[open] summary::after{transform:rotate(45deg)}
+        .faq-body{padding:0 26px 22px;font-size:.84rem;color:var(--text-body);line-height:1.85}
+
+        .final-cta{padding:100px 0;text-align:center;background:linear-gradient(180deg,var(--bg-warm) 0%,var(--bg) 100%)}
+        .final-cta h2{font-size:clamp(2rem,5vw,3.2rem);font-weight:500;color:var(--text);margin-bottom:14px}
+        .terra-text{color:var(--terra);font-style:italic}
+        .final-ps{margin-top:32px;font-size:.84rem;color:var(--text-muted);font-style:italic;line-height:1.85}
+
+        footer{padding:52px 0;border-top:1px solid var(--border);text-align:center}
+        .footer-brand{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:500;color:var(--text);margin-bottom:18px;letter-spacing:.1em}
+        .footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:22px}
+        .footer-links a{font-size:.68rem;color:var(--text-muted);text-decoration:none;letter-spacing:.05em;transition:color .3s}
+        .footer-links a:hover{color:var(--terra)}
+        .footer-legal{font-size:.62rem;color:var(--text-dim);line-height:1.9}
+
+        .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-d1{transition-delay:.12s}
+        .reveal-d2{transition-delay:.24s}
+
+        @media(max-width:900px){
+            .intro-grid,.hook-inner,.audience-grid{grid-template-columns:1fr}
+            .hook-inner.reverse{direction:ltr}
+            .intro-grid{gap:36px}
+            .hook-inner{gap:36px}
+            .topics-grid{grid-template-columns:1fr}
+            .shift-items{grid-template-columns:1fr;max-width:320px}
+            .host-layout{grid-template-columns:1fr;gap:28px}
+            .host-photo{width:200px;height:260px}
+            .hook-visual svg{max-width:100%;height:auto}
+        }
+        @media(max-width:600px){
+            .section{padding:68px 0}
+            .hero{padding:100px 20px 70px}
+            .pricing-card{padding:32px 22px}
+            .hero-meta{gap:14px}
+            .hook{padding:56px 0}
+            .hero-sub{font-size:1.15rem}
+            .hero-sub3{font-size:.9rem}
+            .shift-quote{font-size:1.2rem;padding:0 8px}
+            .hook-title{font-size:1.3rem}
+            .hook-principle{font-size:1rem}
+            .audience-card{padding:24px}
+            .host-stats{gap:28px}
+        }
+    </style>
+</head>
+<body>
+
+<nav id="nav">
+    <div class="container-wide">
+        <a href="#" class="logo">Архитектура сознания</a>
+        <a href="#pricing" class="nav-cta">Записаться</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-breath"></div>
+    <div class="hero-label">7 марта · суббота · 13:00 мск</div>
+    <h1 class="hero-title">Выбор</h1>
+    <p class="hero-sub">
+        Вам кажется, что&nbsp;вы&nbsp;выбираете
+    </p>
+    <p class="hero-sub3">
+        Что если прямо сейчас, в&nbsp;эту самую секунду,<br>
+        вы&nbsp;выбираете, чтобы ничего не&nbsp;получилось?
+    </p>
+    <div class="hero-meta">
+        <div class="hero-meta-item"><div class="hero-meta-dot"></div>Онлайн · Zoom</div>
+        <div class="hero-meta-item"><div class="hero-meta-dot"></div>90 минут</div>
+        <div class="hero-meta-item"><div class="hero-meta-dot"></div>Запись навсегда</div>
+    </div>
+    <div class="hero-cta-wrap">
+        <a href="#pricing" class="btn-primary">Выбираю встречу →</a>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTRO — visual grid -->
+<section class="section">
+    <div class="container-wide">
+        <div class="reveal">
+            <div class="section-label">Знакомая петля</div>
+            <h2 class="section-title">Понимание есть.<br><span class="accent">Движения нет.</span></h2>
+        </div>
+        <div class="intro-grid">
+            <div class="intro-text reveal">
+                <p>Человек слушает вебинары. Кивает. Вдохновляется. Делает заметки. <strong>Через три дня забывает.</strong></p>
+                <p>Ложится спать с&nbsp;ощущением <em>«с&nbsp;понедельника по-новому»</em>. Просыпается и&nbsp;живёт по-старому.</p>
+                <p>Знания есть. Желание есть. Внутри что-то сжимается. И&nbsp;снова откладывание. Снова «не&nbsp;время».</p>
+            </div>
+            <div class="reveal reveal-d1" style="display:flex;justify-content:center">
+                <svg width="320" height="260" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes loopSpin{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-88}}
+                        @keyframes loopPulse{0%,100%{r:7;opacity:.7}50%{r:10;opacity:.9}}
+                        @keyframes labelFade{0%,20%{opacity:1}25%,45%{opacity:.2}50%,70%{opacity:1}75%,95%{opacity:.2}}
+                        @keyframes l1{0%,20%{opacity:1;font-size:12px}25%,95%{opacity:.25;font-size:11px}}
+                        @keyframes l2{25%,45%{opacity:1;font-size:12px}50%,95%{opacity:.25;font-size:11px}0%,20%{opacity:.25;font-size:11px}}
+                        @keyframes l3{50%,70%{opacity:1;font-size:12px}75%,95%{opacity:.25;font-size:11px}0%,45%{opacity:.25;font-size:11px}}
+                        @keyframes l4{75%,95%{opacity:1;font-size:12px}0%,70%{opacity:.25;font-size:11px}}
+                    </style>
+                    <circle cx="160" cy="120" r="80" stroke="#9B4234" stroke-width="2.5" stroke-dasharray="6 8" opacity="0.4" style="animation:loopSpin 8s linear infinite"/>
+                    <circle cx="160" cy="120" r="50" stroke="#9B4234" stroke-width="1.5" opacity="0.15"/>
+                    <path d="M240 120 Q240 55 185 45" stroke="#9B4234" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+                    <path d="M80 120 Q80 185 135 195" stroke="#9B4234" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+                    <path d="M185 45 L191 54 L181 51" stroke="#9B4234" stroke-width="2" fill="none" opacity="0.55"/>
+                    <path d="M135 195 L129 186 L139 189" stroke="#9B4234" stroke-width="2" fill="none" opacity="0.55"/>
+                    <text x="160" y="28" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l1 6s ease infinite">вдохновился</text>
+                    <text x="268" y="124" text-anchor="start" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l2 6s ease infinite">решил</text>
+                    <text x="160" y="222" text-anchor="middle" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l3 6s ease infinite">не сделал</text>
+                    <text x="52" y="124" text-anchor="end" font-family="DM Sans" font-size="11" fill="#332924" font-weight="600" style="animation:l4 6s ease infinite">забыл</text>
+                    <circle cx="160" cy="120" fill="#9B4234" style="animation:loopPulse 3s ease-in-out infinite"><animate attributeName="r" values="7;10;7" dur="3s" repeatCount="indefinite"/></circle>
+                    <text x="160" y="142" text-anchor="middle" font-family="Playfair Display" font-size="12" fill="#9B4234" font-style="italic" opacity="0.8">петля</text>
+                    <text x="160" y="252" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#5C4D46" font-weight="500">Совет всё тот же: «просто выбери»</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SHIFT -->
+<section class="section shift-section">
+    <div class="container-wide">
+        <div class="shift-quote reveal">
+            «Что, если дело не&nbsp;в&nbsp;лени и&nbsp;не&nbsp;в&nbsp;мотивации, а&nbsp;в&nbsp;решении, которое было принято давно и&nbsp;забыто?»
+        </div>
+        <div class="shift-items">
+            <div class="shift-item reveal"><div class="shift-old">«Я не могу»</div><div class="shift-arrow">↓</div><div class="shift-new">Решение, которое можно увидеть</div></div>
+            <div class="shift-item reveal reveal-d1"><div class="shift-old">«Это невозможно»</div><div class="shift-arrow">↓</div><div class="shift-new">Выбор, который можно пересмотреть</div></div>
+            <div class="shift-item reveal reveal-d2"><div class="shift-old">«Уже поздно»</div><div class="shift-arrow">↓</div><div class="shift-new">Факт или решение?</div></div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOOK 1 -->
+<section class="section" style="padding-bottom:0">
+<div class="container-wide">
+    <div class="hook reveal">
+        <div class="hook-inner">
+            <div class="hook-content">
+                <div class="hook-num">Наблюдение I</div>
+                <h2 class="hook-title">Между «хочу» и&nbsp;«выбираю» есть пропасть</h2>
+                <div class="hook-body">
+                    <p><strong>«Хочу хотеть»</strong> — это листать ленту и&nbsp;думать «хорошо бы&nbsp;так». Не&nbsp;желание. Кино про чужую жизнь.</p>
+                    <p><strong>«Хочу»</strong> — внутри что-то шевелится. Это пожелание на&nbsp;Новый год. Ещё не&nbsp;решение.</p>
+                    <p><strong>«Выбираю»</strong> — действие. «Да» одному значит «нет» остальному. И&nbsp;вот здесь у&nbsp;большинства стоп.</p>
+                </div>
+                <div class="hook-principle">Сначала нужно захотеть захотеть. Это&nbsp;отдельная работа, которую почти никто не&nbsp;делает.</div>
+            </div>
+            <div class="hook-visual">
+                <svg width="300" height="220" viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes stepGlow1{0%,100%{opacity:1;stroke-width:2.5}30%,70%{opacity:.4;stroke-width:1.5}}
+                        @keyframes stepGlow2{0%,30%{opacity:.4;stroke-width:1.5}35%,65%{opacity:1;stroke-width:2.5}70%,100%{opacity:.4;stroke-width:1.5}}
+                        @keyframes stepGlow3{0%,65%{opacity:.7;stroke-width:2}70%,100%{opacity:1;stroke-width:3}}
+                        @keyframes markerClimb{0%,30%{cx:50;cy:137}35%,65%{cx:150;cy:97}70%,100%{cx:250;cy:52}}
+                        @keyframes markerPulse{0%,100%{r:4;opacity:.6}50%{r:6;opacity:.9}}
+                        @keyframes choiceGlow{0%,65%{box-shadow:none;filter:none}70%,100%{filter:drop-shadow(0 0 8px rgba(155,66,52,0.3))}}
+                    </style>
+                    <rect x="10" y="140" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" style="animation:stepGlow1 5s ease infinite"/>
+                    <text x="50" y="162" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#5C4D46" font-weight="600">ХОЧУ</text>
+                    <text x="50" y="178" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#5C4D46" font-weight="600">ХОТЕТЬ</text>
+                    <text x="50" y="210" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">фантазия</text>
+                    <rect x="110" y="100" width="80" height="56" rx="3" fill="#FDF5F2" stroke="#9B4234" style="animation:stepGlow2 5s ease infinite"/>
+                    <text x="150" y="133" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#332924" font-weight="600">ХОЧУ</text>
+                    <text x="150" y="170" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">пожелание</text>
+                    <g style="animation:choiceGlow 5s ease infinite">
+                        <rect x="210" y="50" width="80" height="56" rx="3" fill="#9B4234" stroke="#7A2E23" stroke-width="2"/>
+                        <text x="250" y="77" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#fff" font-weight="700">ВЫБИРАЮ</text>
+                    </g>
+                    <text x="250" y="120" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#9B4234" font-weight="500">действие</text>
+                    <path d="M90 155 L110 135" stroke="#9B4234" stroke-width="2" opacity="0.5"/>
+                    <path d="M190 115 L210 95" stroke="#9B4234" stroke-width="2" opacity="0.5"/>
+                    <circle fill="#9B4234" style="animation:markerPulse 2s ease infinite"><animate attributeName="cx" values="50;50;150;150;250;250;50" dur="5s" repeatCount="indefinite"/><animate attributeName="cy" values="137;137;97;97;52;52;137" dur="5s" repeatCount="indefinite"/><animate attributeName="r" values="5;5;5;5;6;8;5" dur="5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.6;.6;.6;.9;.9;.6" dur="5s" repeatCount="indefinite"/></circle>
+                    <text x="192" y="112" text-anchor="end" font-family="Playfair Display" font-size="10" fill="#9B4234" font-style="italic" opacity="0.7">пропасть</text>
+                    <path d="M195 108 Q202 80 210 78" stroke="#9B4234" stroke-width="1.2" stroke-dasharray="3 3" fill="none" opacity="0.45"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOOK 2 -->
+    <div class="hook reveal">
+        <div class="hook-inner reverse">
+            <div class="hook-content">
+                <div class="hook-num">Наблюдение II</div>
+                <h2 class="hook-title">Внутри каждого «не&nbsp;могу» спрятано решение</h2>
+                <div class="hook-body">
+                    <p>«Не&nbsp;могу», «не&nbsp;получится», «не&nbsp;для&nbsp;меня». Звучит как описание реальности. На&nbsp;самом деле это <strong>решения, принятые когда-то давно</strong>. С&nbsp;тех пор не&nbsp;пересмотренные.</p>
+                    <p>Когда-то это была защита. Умная, точная. Сейчас ресурсы другие, опыт другой. <em>Решение&nbsp;то&nbsp;же.</em></p>
+                </div>
+                <div class="hook-principle">Разница между фактом и&nbsp;решением: факт нельзя изменить. Решение&nbsp;можно.</div>
+            </div>
+            <div class="hook-visual">
+                <svg width="260" height="220" viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes wallClose1{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.55;transform:scale(.97)}}
+                        @keyframes wallClose2{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.65;transform:scale(.95)}}
+                        @keyframes wallClose3{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.7;transform:scale(.93)}}
+                        @keyframes trapped{0%,100%{r:7;opacity:.75}50%{r:5;opacity:.5}}
+                        @keyframes wallLabel{0%,100%{opacity:.7}50%{opacity:.9}}
+                    </style>
+                    <g transform-origin="130 110" style="animation:wallClose1 6s ease-in-out infinite">
+                        <rect x="20" y="20" width="220" height="180" rx="4" stroke="#9B4234" stroke-width="2" stroke-dasharray="6 8" opacity="0.4" fill="none"/>
+                    </g>
+                    <g transform-origin="130 110" style="animation:wallClose2 6s ease-in-out infinite .5s">
+                        <rect x="45" y="45" width="170" height="130" rx="3" stroke="#9B4234" stroke-width="2" stroke-dasharray="5 7" opacity="0.5" fill="none"/>
+                    </g>
+                    <g transform-origin="130 110" style="animation:wallClose3 6s ease-in-out infinite 1s">
+                        <rect x="70" y="70" width="120" height="80" rx="2" stroke="#9B4234" stroke-width="2.5" opacity="0.55" fill="rgba(155,66,52,0.03)"/>
+                    </g>
+                    <circle cx="130" cy="110" fill="#9B4234"><animate attributeName="r" values="7;5;7" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;.5;.75" dur="6s" repeatCount="indefinite"/></circle>
+                    <text x="130" y="16" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#5C4D46" font-weight="500" style="animation:wallLabel 6s ease infinite">«не для меня»</text>
+                    <text x="130" y="41" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500" style="animation:wallLabel 6s ease infinite .5s">«не получится»</text>
+                    <text x="130" y="66" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600" style="animation:wallLabel 6s ease infinite 1s">«не могу»</text>
+                    <text x="130" y="165" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.8" font-weight="600" style="animation:wallLabel 6s ease infinite 1s">«уже поздно»</text>
+                    <text x="130" y="190" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#9B4234" opacity="0.7" font-weight="500" style="animation:wallLabel 6s ease infinite .5s">«не сейчас»</text>
+                    <text x="130" y="215" text-anchor="middle" font-family="Playfair Display" font-size="11" fill="#9B4234" font-style="italic" opacity="0.7">стены решений</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOOK 3 -->
+    <div class="hook reveal">
+        <div class="hook-inner">
+            <div class="hook-content">
+                <div class="hook-num">Наблюдение III</div>
+                <h2 class="hook-title">Тихая распродажа: как человек отдаёт себя по&nbsp;частям</h2>
+                <div class="hook-body">
+                    <p>Одно «ладно» вместо «нет». Одно согласие на&nbsp;меньшее. Одно молчание ради спокойствия.</p>
+                    <p>Желания: <em>«несерьёзно»</em>. Время: <em>«мне&nbsp;не&nbsp;сложно»</em>. Мечты: <em>«пора повзрослеть»</em>.</p>
+                    <p>По&nbsp;чуть-чуть. Годами. Почти незаметно. Потом кажется, что <strong>возвращать нечего</strong>.</p>
+                </div>
+                <div class="hook-principle">«Возвращать нечего» — не&nbsp;факт. Это решение. И&nbsp;решение можно пересмотреть.</div>
+            </div>
+            <div class="hook-visual">
+                <svg width="260" height="240" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes drainLevel{0%{y:80;height:128}50%{y:150;height:58}100%{y:80;height:128}}
+                        @keyframes drainLine{0%{y1:80;y2:80}50%{y1:150;y2:150}100%{y1:80;y2:80}}
+                        @keyframes drip1{0%{opacity:0;transform:translateY(0)}20%{opacity:.5}100%{opacity:0;transform:translateY(28px)}}
+                        @keyframes drip2{0%{opacity:0;transform:translateY(0)}20%{opacity:.5}100%{opacity:0;transform:translateY(32px)}}
+                        @keyframes drip3{0%{opacity:0;transform:translateY(0)}20%{opacity:.4}100%{opacity:0;transform:translateY(24px)}}
+                        @keyframes labelDim{0%{opacity:.7}50%{opacity:.3}100%{opacity:.7}}
+                        @keyframes nowPulse{0%,100%{opacity:.8}50%{opacity:.5}}
+                    </style>
+                    <path d="M80 20 L80 185 Q80 210 130 210 Q180 210 180 185 L180 20" stroke="#9B4234" stroke-width="2.5" fill="none" opacity="0.5"/>
+                    <rect x="81" width="98" rx="1" fill="#9B4234" opacity="0.1"><animate attributeName="y" values="80;150;80" dur="8s" repeatCount="indefinite"/><animate attributeName="height" values="128;58;128" dur="8s" repeatCount="indefinite"/></rect>
+                    <line x1="81" x2="179" stroke="#9B4234" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.5"><animate attributeName="y1" values="80;150;80" dur="8s" repeatCount="indefinite"/><animate attributeName="y2" values="80;150;80" dur="8s" repeatCount="indefinite"/></line>
+                    <!-- Drips -->
+                    <g style="animation:drip1 2.5s ease-in infinite 0s"><path d="M100 210 L100 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="100" cy="218" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <g style="animation:drip2 2.5s ease-in infinite .8s"><path d="M130 210 L130 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="130" cy="220" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <g style="animation:drip3 2.5s ease-in infinite 1.6s"><path d="M160 210 L160 215" stroke="#9B4234" stroke-width="1.5" opacity="0.4"/><circle cx="160" cy="217" r="1.5" fill="#9B4234" opacity="0.35"/></g>
+                    <!-- Labels that dim as level passes them -->
+                    <text x="198" y="55" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500"><animate attributeName="opacity" values=".7;.3;.7" dur="8s" repeatCount="indefinite"/></text>
+                    <text x="198" y="55" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500">желания</text>
+                    <text x="198" y="85" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite .5s">время</text>
+                    <text x="198" y="115" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite 1s">границы</text>
+                    <text x="198" y="145" font-family="DM Sans" font-size="10" fill="#9B4234" font-weight="500" style="animation:labelDim 8s ease infinite 1.5s">мечты</text>
+                    <path d="M180 50 L193 50" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
+                    <path d="M180 80 L193 80" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
+                    <path d="M180 110 L193 110" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
+                    <path d="M180 140 L193 140" stroke="#9B4234" stroke-width="1.2" opacity="0.5"/>
+                    <!-- "сейчас" label moves with level -->
+                    <g style="animation:nowPulse 3s ease infinite">
+                        <text x="62" font-family="Playfair Display" font-size="11" fill="#9B4234" font-style="italic" text-anchor="end"><animate attributeName="y" values="84;154;84" dur="8s" repeatCount="indefinite"/>сейчас</text>
+                        <line x1="66" x2="80" stroke="#9B4234" stroke-width="1.2" opacity="0.6"><animate attributeName="y1" values="82;152;82" dur="8s" repeatCount="indefinite"/><animate attributeName="y2" values="82;152;82" dur="8s" repeatCount="indefinite"/></line>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- ACCENT BLOCK -->
+<section class="accent-block">
+    <div class="container reveal">
+        <h2>Это не мотивационная<br>встреча</h2>
+        <p>Здесь не будут говорить <span class="terra-glow">«верьте в&nbsp;себя, всё&nbsp;получится»</span>.<br><br>Это разговор про механизмы, которые создают петлю. И&nbsp;про&nbsp;то, как&nbsp;из&nbsp;неё выйти.</p>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOPICS -->
+<section class="section">
+    <div class="container-wide">
+        <div class="reveal" style="text-align:center">
+            <div class="section-label">Что будет на встрече</div>
+            <h2 class="section-title">О чём мы <span class="accent">поговорим</span></h2>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card reveal"><div class="topic-num">01</div><div class="topic-txt">Что значит <strong>«просто выбери»</strong> и&nbsp;что на&nbsp;самом деле стоит за&nbsp;этой фразой</div></div>
+            <div class="topic-card reveal reveal-d1"><div class="topic-num">02</div><div class="topic-txt">Как <strong>захотеть захотеть</strong>, когда желание куда-то исчезло</div></div>
+            <div class="topic-card reveal"><div class="topic-num">03</div><div class="topic-txt">Где спрятан <strong>настоящий выбор</strong> в&nbsp;каждом «не&nbsp;могу» и&nbsp;«не&nbsp;сейчас»</div></div>
+            <div class="topic-card reveal reveal-d1"><div class="topic-num">04</div><div class="topic-txt">Что такое <strong>внутренняя «шиза»</strong> и&nbsp;неосознаваемые программы</div></div>
+            <div class="topic-card reveal"><div class="topic-num">05</div><div class="topic-txt">Почему <strong>суждение о&nbsp;выборе</strong> блокирует возможность его изменить</div></div>
+            <div class="topic-card reveal reveal-d1"><div class="topic-num">06</div><div class="topic-txt">Как происходит <strong>тихая распродажа</strong> и&nbsp;почему кажется, что возвращать нечего</div></div>
+            <div class="topic-card full reveal"><div class="topic-txt">Будет живая практика и&nbsp;возможность увидеть свой выбор прямо на&nbsp;встрече.</div></div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section class="section" style="background:var(--bg-warm)">
+    <div class="container-wide">
+        <div class="reveal" style="text-align:center">
+            <div class="section-label">Формат</div>
+            <h2 class="section-title">Как всё <span class="accent">устроено</span></h2>
+        </div>
+        <div class="process-steps">
+            <div class="process-step reveal"><div class="step-num">01</div><div><h3 class="step-title">Подключение</h3><p class="step-desc">Ссылка на&nbsp;Zoom после оплаты. 7&nbsp;марта в&nbsp;13:00&nbsp;мск начинаем. Камеру включать не&nbsp;обязательно.</p></div></div>
+            <div class="process-step reveal"><div class="step-num">02</div><div><h3 class="step-title">Разбор</h3><p class="step-desc">Посмотрим на&nbsp;механизмы, которые удерживают на&nbsp;месте. Честно, без обещаний чудес.</p></div></div>
+            <div class="process-step reveal"><div class="step-num">03</div><div><h3 class="step-title">Практика</h3><p class="step-desc">Живая работа. Конкретный инструмент, который можно попробовать прямо на&nbsp;встрече.</p></div></div>
+            <div class="process-step reveal"><div class="step-num">04</div><div><h3 class="step-title">Вопросы и&nbsp;итоги</h3><p class="step-desc">Как применять в&nbsp;жизни. Конспект и&nbsp;материалы останутся навсегда.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AUDIENCE -->
+<section class="section audience-section">
+    <div class="container-wide">
+        <div class="reveal"><div class="section-label">Для кого</div><h2 class="section-title">Эта встреча <span class="accent">для вас</span></h2></div>
+        <div class="audience-grid">
+            <div class="audience-card yes reveal"><h3>Приходите, если:</h3><ul>
+                <li>Устали «решать с&nbsp;понедельника» и&nbsp;не&nbsp;начинать</li>
+                <li>Знаете, чего хотите, но&nbsp;внутри что-то сжимается</li>
+                <li>Пробовали аффирмации, визуализации, вебинары</li>
+                <li>Чувствуете, что жизнь где-то проходит мимо</li>
+                <li>Готовы посмотреть на&nbsp;себя честно</li>
+            </ul></div>
+            <div class="audience-card no reveal"><h3>Не подойдёт, если:</h3><ul>
+                <li>Хотите готовый рецепт, а&nbsp;не&nbsp;понимание</li>
+                <li>Не&nbsp;готовы пробовать что-то новое</li>
+                <li>Ждёте, что кто-то решит за&nbsp;вас</li>
+            </ul></div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOST -->
+<section class="section">
+    <div class="container-wide">
+        <div class="reveal"><div class="section-label">Ведущая</div><h2 class="section-title">Дарья <span class="accent">Ростовцева</span></h2></div>
+        <div class="host-layout">
+            <div class="host-photo reveal"><img src="https://thebodymindcode.github.io/session1/daria.jpg" alt="Дарья Ростовцева"></div>
+            <div class="host-info reveal">
+                <h3>Дарья Ростовцева</h3>
+                <div class="host-role">Основатель проекта «Архитектура сознания»</div>
+                <p>Практик на&nbsp;стыке нейробиологии и&nbsp;работы с&nbsp;подсознанием. Создатель «Протокола остановки ума» и&nbsp;«Кода денег».</p>
+                <p>Научный подход без «воды». Практики, которые можно проверить на&nbsp;себе и&nbsp;почувствовать разницу.</p>
+                <div class="host-stats">
+                    <div><div class="host-stat-val">800+</div><div class="host-stat-lbl">участников</div></div>
+                    <div><div class="host-stat-val">10+</div><div class="host-stat-lbl">лет практики</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+    <div class="container">
+        <div class="reveal"><div class="section-label">Регистрация</div><h2 class="section-title" style="text-align:center">Записаться на <span class="accent">встречу</span></h2></div>
+        <div class="pricing-card reveal">
+            <div class="pricing-badge">Zoom-встреча</div>
+            <div class="pricing-event">Выбор</div>
+            <div class="pricing-format">Онлайн · Прямой эфир · Запись навсегда</div>
+            <div class="pricing-date">7 марта 2026</div>
+            <div class="pricing-time">Суббота · 13:00 мск</div>
+            <div class="pricing-line"></div>
+            <div class="pricing-amount">1 490 <span>₽</span></div>
+            <div class="pricing-note">Одна оплата, доступ к&nbsp;записи навсегда</div>
+            <a href="https://payform.ru/9oaMzXj/" target="_blank" class="btn-primary" style="width:100%;display:block;text-align:center">Записаться на встречу →</a>
+            <div class="pricing-bonuses">
+                <div class="pricing-bonuses-title">Бонусы</div>
+                <div class="pricing-bonus"><span class="pricing-bonus-icon">✦</span> Запись встречи навсегда</div>
+                <div class="pricing-bonus"><span class="pricing-bonus-icon">✦</span> Чек-лист по&nbsp;выбору</div>
+                <div class="pricing-bonus"><span class="pricing-bonus-icon">✦</span> Конспект практики и&nbsp;инструменты</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ — расширенный -->
+<section class="section">
+    <div class="container">
+        <div class="faq-wrap">
+            <div class="reveal" style="text-align:center">
+                <div class="section-label">Вопросы</div>
+                <h2 class="section-title">Частые <span class="accent">вопросы</span></h2>
+            </div>
+            <div class="faq-list">
+                <details class="faq reveal"><summary>Чем это отличается от&nbsp;аффирмаций и&nbsp;визуализаций?</summary><div class="faq-body">Аффирмации работают на&nbsp;уровне «хотеть». Здесь работа глубже: на&nbsp;уровне «захотеть захотеть». Мы&nbsp;смотрим на&nbsp;решения, которые были приняты давно и&nbsp;забыты, но&nbsp;до&nbsp;сих пор управляют жизнью.</div></details>
+                <details class="faq reveal"><summary>Будут ли&nbsp;гарантии результата?</summary><div class="faq-body">Нет. Это 90-минутная встреча с&nbsp;практикой и&nbsp;новым взглядом на&nbsp;выбор. Многие участники отмечают, что после встречи что-то сдвигается. У&nbsp;каждого это своё и&nbsp;в&nbsp;своём темпе.</div></details>
+                <details class="faq reveal"><summary>Что, если не&nbsp;смогу быть в&nbsp;прямом эфире?</summary><div class="faq-body">Вы&nbsp;получите запись встречи и&nbsp;конспект практики. Всё останется навсегда.</div></details>
+                <details class="faq reveal"><summary>Это психосоматика? Терапия?</summary><div class="faq-body">Ни&nbsp;то, ни&nbsp;другое. Мы&nbsp;не&nbsp;копаем в&nbsp;прошлое и&nbsp;не&nbsp;даём готовых решений. Мы&nbsp;смотрим на&nbsp;то, какой выбор делается прямо сейчас и&nbsp;почему.</div></details>
+                <details class="faq reveal"><summary>Если я&nbsp;не&nbsp;знаю, чего хочу?</summary><div class="faq-body">Именно об&nbsp;этом и&nbsp;встреча. «Не&nbsp;знаю, чего хочу» тоже может быть решением, а&nbsp;не&nbsp;фактом. На&nbsp;встрече разберём, как работает этот механизм.</div></details>
+                <details class="faq reveal"><summary>Что нужно для участия?</summary><div class="faq-body">Компьютер или телефон, Zoom и&nbsp;90&nbsp;минут тишины. Камера не&nbsp;обязательна.</div></details>
+                <details class="faq reveal"><summary>Уже был опыт с&nbsp;коучами и&nbsp;тренингами. Зачем ещё одна встреча?</summary><div class="faq-body">Большинство тренингов работают с&nbsp;действиями: «сделай то, сделай это». Здесь мы&nbsp;смотрим на&nbsp;уровень ниже: почему человек не&nbsp;делает, даже когда знает что делать. Это другой слой.</div></details>
+                <details class="faq reveal"><summary>Можно ли&nbsp;оплатить из-за рубежа?</summary><div class="faq-body">Да. Напишите в&nbsp;поддержку, подберём удобный способ оплаты.</div></details>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+    <div class="container reveal">
+        <h2>Готовы попробовать<br><span class="terra-text">другой разговор?</span></h2>
+        <p style="max-width:400px;margin:18px auto 36px;font-size:.92rem;color:var(--text-muted);line-height:1.8">7&nbsp;марта · суббота · 13:00&nbsp;мск · Zoom</p>
+        <a href="#pricing" class="btn-primary">Записаться на встречу →</a>
+        <p class="final-ps">Если внутри что-то откликнулось, просто&nbsp;приходите.<br>Остальное разберём&nbsp;вместе.</p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-brand">✦ Архитектура сознания</div>
+        <div class="footer-links">
+            <a href="https://t.me/TheBodyMindCode_support">Telegram: @TheBodyMindCode_support</a>
+            <a href="https://instagram.com/thebodymindcode">Instagram: @thebodymindcode</a>
+        </div>
+        <div class="footer-legal">© 2026. Все права защищены.<br>ИП Ростовцева Дарья Валерьевна · ИНН: 241103415641<br><br>Данная встреча не является медицинской или психологической услугой.</div>
+    </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>50));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('details.faq').forEach(d=>{d.addEventListener('toggle',function(){this.style.borderColor=this.open?'var(--terra-border-h)':'var(--border)'})});
+</script>
+</body>
+</html>
